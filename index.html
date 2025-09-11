@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenkins Practice App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Jenkins Practice Lab</h1>
+            <p>Master CI/CD Concepts & Pipeline Building</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('concepts')">📚 Concepts</button>
+            <button class="tab-btn" onclick="showTab('pipeline')">🔧 Pipeline Builder</button>
+            <button class="tab-btn" onclick="showTab('quiz')">🧠 Quiz</button>
+            <button class="tab-btn" onclick="showTab('build')">⚡ Build Simulator</button>
+        </div>
+
+        <!-- Concepts Tab -->
+        <div id="concepts" class="tab-content active">
+            <div class="concept-card">
+                <div class="concept-title">What is Jenkins?</div>
+                <p>Jenkins is an open-source automation server that helps teams build, test, and deploy applications continuously. It's the heart of CI/CD (Continuous Integration/Continuous Deployment) pipelines.</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Jenkins Pipeline</div>
+                <p>A pipeline is a series of automated steps that code goes through from development to production. It typically includes stages like: Build → Test → Deploy → Monitor.</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Key Jenkins Terms</div>
+                <p><strong>Job:</strong> A runnable task in Jenkins<br>
+                <strong>Build:</strong> One execution of a job<br>
+                <strong>Workspace:</strong> Directory where builds happen<br>
+                <strong>Node:</strong> Machine where Jenkins runs jobs<br>
+                <strong>Plugin:</strong> Extension that adds functionality</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Jenkinsfile</div>
+                <p>A text file that defines your pipeline as code. It can be written in Declarative or Scripted syntax and is stored alongside your application code.</p>
+            </div>
+        </div>
+
+        <!-- Pipeline Builder Tab -->
+        <div id="pipeline" class="tab-content">
+            <h2>🔧 Build Your Pipeline</h2>
+            <p>Drag stages from the left panel to create your pipeline!</p>
+            
+            <div class="pipeline-builder">
+                <div class="stages-panel">
+                    <h3>Available Stages</h3>
+                    <div class="stage-item" draggable="true" data-stage="checkout">📥 Checkout SCM</div>
+                    <div class="stage-item" draggable="true" data-stage="build">🔨 Build</div>
+                    <div class="stage-item" draggable="true" data-stage="test">🧪 Test</div>
+                    <div class="stage-item" draggable="true" data-stage="quality">🔍 Quality Gate</div>
+                    <div class="stage-item" draggable="true" data-stage="security">🛡️ Security Scan</div>
+                    <div class="stage-item" draggable="true" data-stage="deploy-staging">🚀 Deploy to Staging</div>
+                    <div class="stage-item" draggable="true" data-stage="deploy-prod">🌟 Deploy to Production</div>
+                    <div class="stage-item" draggable="true" data-stage="notify">📧 Notify Team</div>
+                </div>
+
+                <div class="pipeline-canvas" id="pipelineCanvas">
+                    <p style="text-align: center; color: #999; margin-top: 150px;">Drop pipeline stages here to build your workflow</p>
+                </div>
+            </div>
+
+            <button class="btn" onclick="generateJenkinsfile()">📄 Generate Jenkinsfile</button>
+            <button class="btn" onclick="clearPipeline()" style="background: #dc3545;">🗑️ Clear Pipeline</button>
+
+            <div id="jenkinsfileOutput" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div id="quiz" class="tab-content">
+            <h2>🧠 Test Your Jenkins Knowledge</h2>
+            <div class="quiz-container" id="quizContainer">
+                <!-- Quiz content will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Build Simulator Tab -->
+        <div id="build" class="tab-content">
+            <h2>⚡ Jenkins Build Simulator</h2>
+            <p>Experience what a Jenkins build looks like!</p>
+
+            <div class="build-controls">
+                <button class="btn" onclick="startBuild()">▶️ Start Build</button>
+                <button class="btn" onclick="stopBuild()" style="background: #dc3545;">⏹️ Stop Build</button>
+                <button class="btn" onclick="clearLog()" style="background: #6c757d;">🧹 Clear Log</button>
+            </div>
+
+            <div class="build-log" id="buildLog">
+                Welcome to Jenkins Build Simulator!
+                Click "Start Build" to begin a simulated CI/CD pipeline execution.
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
