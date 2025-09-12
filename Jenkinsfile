@@ -1,14 +1,17 @@
-pipeline{
-   agent {label "linux"}
-   options {
-     buildDiscarder logRotator(artifactDaysToKeepStr: '',artifactNumToKeepStr: '5', days
-ToKeepStr: '',numToKeepStr:'5')
-     disableConcurrentBuilds()
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building application...'
+                // Add your build commands here
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Add your test commands here
+            }
+        }
     }
-    stages{
-      stage('Hello'){
-        echo "hello"
-       }
-     }
-   }
 }
