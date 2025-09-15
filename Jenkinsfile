@@ -26,8 +26,8 @@ pipeline {
                     if (!fileExists('index.html')) {
                         error('❌ index.html not found!')
                     }
-                    if (!fileExists('styles.css')) {
-                        error('❌ styles.css not found!')
+                    if (!fileExists('style.css')) {
+                        error('❌ style.css not found!')
                     }
                     if (!fileExists('script.js')) {
                         error('❌ script.js not found!')
@@ -62,7 +62,7 @@ pipeline {
                     steps {
                         echo '🎨 Validating CSS...'
                         script {
-                            def cssContent = readFile('styles.css')
+                            def cssContent = readFile('style.css')
                             def cssLines = cssContent.split('\n').size()
                             echo "📊 CSS file contains ${cssLines} lines"
                             
@@ -108,7 +108,7 @@ pipeline {
                     
                     // Copy files to build directory
                     sh "cp index.html ${BUILD_DIR}/"
-                    sh "cp styles.css ${BUILD_DIR}/"
+                    sh "cp style.css ${BUILD_DIR}/"
                     sh "cp script.js ${BUILD_DIR}/"
                     
                     // Add build timestamp to HTML
@@ -149,7 +149,7 @@ pipeline {
                     // Test CSS syntax (basic check)
                     sh """
                         echo '🎨 Testing CSS syntax:'
-                        if grep -q '{' ${BUILD_DIR}/styles.css && grep -q '}' ${BUILD_DIR}/styles.css; then
+                        if grep -q '{' ${BUILD_DIR}/style.css && grep -q '}' ${BUILD_DIR}/style.css; then
                             echo '✅ CSS syntax appears valid'
                         else
                             echo '❌ CSS syntax issues found'
