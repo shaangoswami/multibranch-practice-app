@@ -8,6 +8,8 @@ This repository is designed as a learning/practice project to demonstrate:
 - Promotion to staging and production with approval gates
 - How pipelines treat branch types (feature/*, develop, main) and pull requests
 
+- View : https://shaangoswami.github.io/multibranch-practice-app/ 
+
 ---
 
 ## Table of contents ☑️☑️☑️
