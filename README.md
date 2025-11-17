@@ -1,4 +1,4 @@
-# multibranch-practice-app
+# Jenkins-Practice-lab ♾️ 💻
 
 A small demo application used to practice Jenkins multibranch pipeline workflows and CI/CD patterns.
 
@@ -10,7 +10,7 @@ This repository is designed as a learning/practice project to demonstrate:
 
 ---
 
-## Table of contents
+## Table of contents ☑️☑️☑️
 
 - Prerequisites
 - Branch & pipeline strategy
@@ -27,7 +27,7 @@ This repository is designed as a learning/practice project to demonstrate:
 
 ---
 
-## Prerequisites
+## Prerequisites 🌟🌟🌟
 
 - GitHub repository (this repo)
 - Jenkins server (2.289+ recommended) with:
@@ -40,7 +40,7 @@ This repository is designed as a learning/practice project to demonstrate:
 
 ---
 
-## Branch & pipeline strategy
+## Branch & pipeline strategy 
 
 Recommended branch naming / behavior:
 
@@ -111,7 +111,7 @@ Recommend using Jenkins Credentials + withCredentials to avoid plaintext.
 
 ---
 
-## Troubleshooting tips
+## ⁉️ Troubleshooting tips ⁉️
 
 - "No Jenkinsfile found": Ensure Jenkinsfile exists at repo root or configure the path in multibranch job.
 - Builds not triggered on PRs: Ensure branch source discovery includes PRs and GitHub webhook is configured.
@@ -120,7 +120,7 @@ Recommend using Jenkins Credentials + withCredentials to avoid plaintext.
 
 ---
 
-## Contributing
+## Contributing 
 
 This is a practice repo. If you want to extend:
 - Add a real build for your language (package.json, pom.xml, etc.)
@@ -136,10 +136,10 @@ Use whatever license you prefer. (No license file included by default.)
 
 ---
 
-## Contact
+## Contact 
 
-Maintainer: shaangoswami
+Maintainer: vdiaries000@gmail.com
 
 ---
 
-Happy practicing — use this repo to explore multibranch Jenkins behavior for branches and PRs and tweak the Jenkinsfile to match your toolchain.
+Happy practicing 😉 — use this repo to explore multibranch Jenkins behavior for branches and PRs and tweak the Jenkinsfile to match your toolchain.
