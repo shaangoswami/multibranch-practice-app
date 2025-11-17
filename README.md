@@ -27,8 +27,6 @@ This repository is designed as a learning/practice project to demonstrate:
 
 ---
 
----
-
 ## Prerequisites 🌟🌟🌟
 
 - GitHub repository (this repo)
@@ -56,8 +54,6 @@ Recommended branch naming / behavior:
   - Built, tested, and may be promoted directly to production after approvals.
 - PRs
   - Pull request builds should be configured to run tests and report status back to GitHub (so maintainers can review).
-
----
 
 ---
 
