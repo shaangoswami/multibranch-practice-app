@@ -11,25 +11,74 @@
         <div class="header">
             <h1>🚀 Jenkins Practice Lab</h1>
             <p>Master CI/CD Concepts & Pipeline Building</p>
+            <div class="header-controls">
+                <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
+            </div>
+        </div>
+
+        <!-- Progress Tracker -->
+        <div class="progress-tracker">
+            <div class="progress-item">
+                <span>📚 Concepts</span>
+                <div class="progress-bar"><div class="progress-fill" id="conceptProgress" style="width: 0%"></div></div>
+            </div>
+            <div class="progress-item">
+                <span>🧠 Quiz</span>
+                <div class="progress-bar"><div class="progress-fill" id="quizProgress" style="width: 0%"></div></div>
+            </div>
+            <div class="progress-item">
+                <span>🔧 Pipeline</span>
+                <div class="progress-bar"><div class="progress-fill" id="pipelineProgress" style="width: 0%"></div></div>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div id="settingsPanel" class="settings-panel">
+            <div class="settings-content">
+                <h2>⚙️ Settings & Preferences</h2>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                        🌙 Dark Mode
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="soundToggle" checked>
+                        🔊 Sound Effects
+                    </label>
+                </div>
+                <button class="btn" onclick="clearAllProgress()">🗑️ Clear Progress</button>
+                <button class="btn" onclick="toggleSettings()" style="background: #6c757d;">✕ Close</button>
+            </div>
         </div>
 
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="showTab('concepts')">📚 Concepts</button>
+            <button class="tab-btn" onclick="showTab('favorites')">⭐ Favorites</button>
+            <button class="tab-btn" onclick="showTab('examples')">📖 Examples</button>
             <button class="tab-btn" onclick="showTab('pipeline')">🔧 Pipeline Builder</button>
+            <button class="tab-btn" onclick="showTab('presets')">📋 Presets</button>
             <button class="tab-btn" onclick="showTab('quiz')">🧠 Quiz</button>
             <button class="tab-btn" onclick="showTab('build')">⚡ Build Simulator</button>
         </div>
 
         <!-- Concepts Tab -->
         <div id="concepts" class="tab-content active">
+            <div class="tab-header">
+                <h2>📚 Jenkins Concepts</h2>
+                <input type="text" id="conceptSearch" placeholder="🔍 Search concepts..." class="search-box" onkeyup="filterConcepts()">
+            </div>
             <div class="concept-card">
                 <div class="concept-title">What is Jenkins?</div>
                 <p>Jenkins is an open-source automation server that helps teams build, test, and deploy applications continuously. It's the heart of CI/CD (Continuous Integration/Continuous Deployment) pipelines.</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'what-is-jenkins')">☆ Add to Favorites</button>
             </div>
 
             <div class="concept-card">
                 <div class="concept-title">Jenkins Pipeline</div>
                 <p>A pipeline is a series of automated steps that code goes through from development to production. It typically includes stages like: Build → Test → Deploy → Monitor.</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'jenkins-pipeline')">☆ Add to Favorites</button>
             </div>
 
             <div class="concept-card">
@@ -39,11 +88,193 @@
                 <strong>Workspace:</strong> Directory where builds happen<br>
                 <strong>Node:</strong> Machine where Jenkins runs jobs<br>
                 <strong>Plugin:</strong> Extension that adds functionality</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'jenkins-terms')">☆ Add to Favorites</button>
             </div>
 
             <div class="concept-card">
                 <div class="concept-title">Jenkinsfile</div>
                 <p>A text file that defines your pipeline as code. It can be written in Declarative or Scripted syntax and is stored alongside your application code.</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'jenkinsfile')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">CI/CD Explained</div>
+                <p><strong>Continuous Integration (CI):</strong> Automatically test code changes when committed<br>
+                <strong>Continuous Deployment (CD):</strong> Automatically deploy tested code to production<br>
+                <strong>Continuous Delivery:</strong> Ready for production but manual approval needed</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'cicd-explained')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Pipeline Stages</div>
+                <p><strong>Build Stage:</strong> Compile code and create artifacts<br>
+                <strong>Test Stage:</strong> Run unit, integration, and acceptance tests<br>
+                <strong>Deploy Stage:</strong> Move code to staging or production environment<br>
+                <strong>Post-actions:</strong> Cleanup, notifications, and reporting</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'pipeline-stages')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Declarative vs Scripted Pipelines</div>
+                <p><strong>Declarative:</strong> Structured, easier to read, recommended for most use cases<br>
+                <strong>Scripted:</strong> More flexible, based on Groovy, for complex workflows</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'declarative-vs-scripted')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Best Practices</div>
+                <p>✓ Keep pipelines simple and modular<br>
+                ✓ Use environment variables for configuration<br>
+                ✓ Implement proper error handling<br>
+                ✓ Secure secrets with Jenkins credentials<br>
+                ✓ Version control your Jenkinsfile<br>
+                ✓ Test pipelines in a sandbox environment first</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'best-practices')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Common Jenkins Plugins</div>
+                <p><strong>Git Plugin:</strong> Source code management integration<br>
+                <strong>Docker Plugin:</strong> Build and run containers<br>
+                <strong>Kubernetes Plugin:</strong> Deploy to Kubernetes clusters<br>
+                <strong>Pipeline:</strong> Create sophisticated pipelines<br>
+                <strong>Blue Ocean:</strong> Modern UI for pipelines</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'jenkins-plugins')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Webhooks & Triggers</div>
+                <p><strong>Poll SCM:</strong> Jenkins periodically checks for code changes<br>
+                <strong>Webhook:</strong> Git repository triggers Jenkins when changes are pushed<br>
+                <strong>Manual Trigger:</strong> Run builds manually from Jenkins UI<br>
+                <strong>Scheduled Builds:</strong> Run builds at specific times using cron syntax</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'webhooks-triggers')">☆ Add to Favorites</button>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">Distributed Builds</div>
+                <p>Jenkins can run builds on multiple machines (agents/nodes) to distribute workload. A master node coordinates builds that run on agent nodes, enabling parallel execution and better resource utilization.</p>
+                <button class="favorite-btn" onclick="toggleFavorite(this, 'distributed-builds')">☆ Add to Favorites</button>
+            </div>
+        </div>
+
+        <!-- Favorites Tab -->
+        <div id="favorites" class="tab-content">
+            <h2>⭐ Your Favorite Concepts</h2>
+            <div id="favoritesList">
+                <p style="text-align: center; color: #999;">No favorites yet. Click the ☆ icon on any concept to add it here!</p>
+            </div>
+        </div>
+
+        <!-- Examples Tab -->
+        <div id="examples" class="tab-content">
+            <h2>📖 Real Jenkinsfile Examples</h2>
+            <div class="examples-container">
+                <div class="example-card">
+                    <h3>Node.js Application</h3>
+                    <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Install') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+    }
+}</code></pre>
+                </div>
+                <div class="example-card">
+                    <h3>Python Application</h3>
+                    <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Setup') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        stage('Lint') {
+            steps {
+                sh 'pylint src/'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'pytest'
+            }
+        }
+    }
+}</code></pre>
+                </div>
+                <div class="example-card">
+                    <h3>Docker Build & Push</h3>
+                    <pre><code>pipeline {
+    agent any
+    environment {
+        REGISTRY = 'docker.io'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t myapp:${BUILD_NUMBER} .'
+            }
+        }
+        stage('Push') {
+            steps {
+                sh 'docker push myapp:${BUILD_NUMBER}'
+            }
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Presets Tab -->
+        <div id="presets" class="tab-content">
+            <h2>📋 Pipeline Presets</h2>
+            <p>Quick templates for common CI/CD workflows:</p>
+            <div class="presets-grid">
+                <div class="preset-card" onclick="loadPreset('nodejs')">
+                    <div class="preset-icon">🟢</div>
+                    <h3>Node.js</h3>
+                    <p>npm install, test, build</p>
+                </div>
+                <div class="preset-card" onclick="loadPreset('python')">
+                    <div class="preset-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p>pip, lint, pytest, build</p>
+                </div>
+                <div class="preset-card" onclick="loadPreset('docker')">
+                    <div class="preset-icon">🐳</div>
+                    <h3>Docker</h3>
+                    <p>Build, test, push image</p>
+                </div>
+                <div class="preset-card" onclick="loadPreset('kubernetes')">
+                    <div class="preset-icon">☸️</div>
+                    <h3>Kubernetes</h3>
+                    <p>Deploy to K8s clusters</p>
+                </div>
+                <div class="preset-card" onclick="loadPreset('fullstack')">
+                    <div class="preset-icon">🎨</div>
+                    <h3>Full Stack</h3>
+                    <p>Backend + Frontend deploy</p>
+                </div>
+                <div class="preset-card" onclick="loadPreset('microservices')">
+                    <div class="preset-icon">🔌</div>
+                    <h3>Microservices</h3>
+                    <p>Multi-service deployment</p>
+                </div>
             </div>
         </div>
 
@@ -72,6 +303,7 @@
 
             <button class="btn" onclick="generateJenkinsfile()">📄 Generate Jenkinsfile</button>
             <button class="btn" onclick="clearPipeline()" style="background: #dc3545;">🗑️ Clear Pipeline</button>
+            <button class="btn" onclick="copyToClipboard()" style="background: #28a745;">📋 Copy Code</button>
 
             <div id="jenkinsfileOutput" style="margin-top: 20px;"></div>
         </div>

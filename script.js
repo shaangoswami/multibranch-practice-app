@@ -4,6 +4,8 @@ let score = 0;
 let buildRunning = false;
 let buildInterval;
 let pipelineStages = [];
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+let darkModeEnabled = localStorage.getItem('darkMode') === 'true';
 
 // Quiz questions data
 const quizQuestions = [
@@ -51,16 +53,26 @@ const quizQuestions = [
 
 // Tab switching functionality
 function showTab(tabName) {
-    // Hide all tabs
+    // Hide all tabs with smooth transition
     const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => tab.classList.remove('active'));
+    tabs.forEach(tab => {
+        if (tab.classList.contains('active')) {
+            tab.classList.remove('active');
+        }
+    });
 
-    // Remove active class from all buttons
+    // Remove active class from all buttons with smooth transition
     const buttons = document.querySelectorAll('.tab-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
 
     // Show selected tab
-    document.getElementById(tabName).classList.add('active');
+    const selectedTab = document.getElementById(tabName);
+    if (selectedTab) {
+        setTimeout(() => {
+            selectedTab.classList.add('active');
+        }, 10);
+    }
+    
     event.target.classList.add('active');
 
     // Load quiz if quiz tab is selected
@@ -94,6 +106,12 @@ function selectOption(index) {
     options.forEach(opt => opt.classList.remove('selected'));
     options[index].classList.add('selected');
     window.selectedOption = index;
+    
+    // Add haptic feedback simulation with scale animation
+    options[index].style.transform = 'scale(1.05)';
+    setTimeout(() => {
+        options[index].style.transform = 'scale(1.02)';
+    }, 100);
 }
 
 function submitAnswer() {
@@ -112,6 +130,7 @@ function submitAnswer() {
         result.innerHTML = `<div class="result incorrect">❌ Incorrect. The correct answer is: ${quizQuestions[currentQuiz].options[correct]}</div>`;
     }
 
+    // Smooth transition to next question
     setTimeout(() => {
         currentQuiz++;
         if (currentQuiz < quizQuestions.length) {
@@ -120,7 +139,7 @@ function submitAnswer() {
         } else {
             showQuizComplete();
         }
-    }, 2000);
+    }, 2500);
 }
 
 function showQuizComplete() {
@@ -199,25 +218,40 @@ function addStageToCanvas(stageType) {
 
     const stageDiv = document.createElement('div');
     stageDiv.className = 'pipeline-stage';
+    stageDiv.style.opacity = '0';
     stageDiv.innerHTML = `
         ${stageNames[stageType]}
-        <button onclick="removeStage(this)" style="background: rgba(255,255,255,0.3); border: none; color: white; margin-left: 10px; border-radius: 3px; cursor: pointer; padding: 2px 6px;">×</button>
+        <button onclick="removeStage(this)" style="background: rgba(255,255,255,0.3); border: none; color: white; margin-left: 10px; border-radius: 3px; cursor: pointer; padding: 2px 6px; transition: all 0.3s ease;">×</button>
     `;
     
     canvas.appendChild(stageDiv);
     pipelineStages.push(stageType);
+    
+    // Animate in
+    setTimeout(() => {
+        stageDiv.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        stageDiv.style.opacity = '1';
+        stageDiv.style.transform = 'scale(1)';
+    }, 10);
 }
 
 function removeStage(button) {
     const stage = button.parentNode;
     const index = Array.from(stage.parentNode.children).indexOf(stage);
     pipelineStages.splice(index, 1);
-    stage.remove();
-
-    if (pipelineStages.length === 0) {
-        document.getElementById('pipelineCanvas').innerHTML = 
-            '<p style="text-align: center; color: #999; margin-top: 150px;">Drop pipeline stages here to build your workflow</p>';
-    }
+    
+    // Smooth removal animation
+    stage.style.transition = 'all 0.4s ease';
+    stage.style.opacity = '0';
+    stage.style.transform = 'scale(0.8) translateX(-20px)';
+    
+    setTimeout(() => {
+        stage.remove();
+        if (pipelineStages.length === 0) {
+            document.getElementById('pipelineCanvas').innerHTML = 
+                '<p style="text-align: center; color: #999; margin-top: 150px;">Drop pipeline stages here to build your workflow</p>';
+        }
+    }, 400);
 }
 
 function clearPipeline() {
@@ -279,8 +313,20 @@ ${pipelineStages.map(stage => `        stage('${stageNames[stage]}') {
     }
 }`;
 
-    document.getElementById('jenkinsfileOutput').innerHTML = 
-        `<h3>Generated Jenkinsfile:</h3><pre>${jenkinsfile}</pre>`;
+    const output = document.getElementById('jenkinsfileOutput');
+    output.style.opacity = '0';
+    
+    setTimeout(() => {
+        output.innerHTML = 
+            `<h3>Generated Jenkinsfile:</h3><pre>${jenkinsfile}</pre>`;
+        output.style.transition = 'opacity 0.4s ease';
+        output.style.opacity = '1';
+        
+        // Update progress
+        const pipelinesGenerated = (parseInt(localStorage.getItem('pipelinesGenerated')) || 0) + 1;
+        localStorage.setItem('pipelinesGenerated', pipelinesGenerated);
+        updateProgressBars();
+    }, 200);
 }
 
 // Build Simulator Functions
@@ -290,6 +336,13 @@ function startBuild() {
     buildRunning = true;
     const log = document.getElementById('buildLog');
     log.innerHTML = '';
+    log.style.opacity = '0.5';
+    
+    // Smooth fade in
+    setTimeout(() => {
+        log.style.transition = 'opacity 0.3s ease';
+        log.style.opacity = '1';
+    }, 10);
     
     const buildSteps = [
         { message: '[INFO] Starting Jenkins build #42', delay: 100 },
@@ -369,8 +422,143 @@ function clearLog() {
 document.addEventListener('DOMContentLoaded', () => {
     setupDragAndDrop();
     loadQuiz();
+    initializeApp();
     
     // Add some interactive feedback
     console.log('🚀 Jenkins Practice App loaded successfully!');
     console.log('💡 Tip: Try building a complete CI/CD pipeline in the Pipeline Builder tab');
 });
+
+// Initialize app settings
+function initializeApp() {
+    if (darkModeEnabled) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').checked = true;
+    }
+    updateProgressBars();
+}
+
+// Toggle Settings Panel
+function toggleSettings() {
+    const panel = document.getElementById('settingsPanel');
+    panel.classList.toggle('active');
+}
+
+// Toggle Dark Mode
+function toggleDarkMode() {
+    darkModeEnabled = !darkModeEnabled;
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', darkModeEnabled);
+}
+
+// Clear all progress
+function clearAllProgress() {
+    if (confirm('Are you sure you want to clear all progress? This cannot be undone.')) {
+        localStorage.clear();
+        favorites = [];
+        location.reload();
+    }
+}
+
+// Toggle Favorites
+function toggleFavorite(button, conceptId) {
+    const index = favorites.indexOf(conceptId);
+    if (index > -1) {
+        favorites.splice(index, 1);
+        button.classList.remove('favorited');
+        button.textContent = '☆ Add to Favorites';
+    } else {
+        favorites.push(conceptId);
+        button.classList.add('favorited');
+        button.textContent = '★ Added to Favorites';
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateFavoritesList();
+}
+
+// Update Favorites List
+function updateFavoritesList() {
+    const favoritesList = document.getElementById('favoritesList');
+    const conceptCards = document.querySelectorAll('.concept-card');
+    
+    if (favorites.length === 0) {
+        favoritesList.innerHTML = '<p style="text-align: center; color: #999;">No favorites yet. Click the ☆ icon on any concept to add it here!</p>';
+        return;
+    }
+    
+    let html = '<div>';
+    conceptCards.forEach((card, index) => {
+        const conceptId = `concept-${index}`;
+        if (favorites.includes(conceptId)) {
+            html += `<div class="concept-card">${card.innerHTML}</div>`;
+        }
+    });
+    html += '</div>';
+    favoritesList.innerHTML = html;
+}
+
+// Filter Concepts by Search
+function filterConcepts() {
+    const searchTerm = document.getElementById('conceptSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('#concepts .concept-card');
+    
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+        if (text.includes(searchTerm)) {
+            card.style.animation = 'fadeInLeft 0.4s ease';
+        }
+    });
+}
+
+// Load Pipeline Preset
+function loadPreset(presetType) {
+    clearPipeline();
+    
+    const presets = {
+        'nodejs': ['checkout', 'build', 'test'],
+        'python': ['checkout', 'build', 'test', 'quality'],
+        'docker': ['checkout', 'build', 'security', 'deploy-staging', 'deploy-prod'],
+        'kubernetes': ['checkout', 'build', 'test', 'deploy-staging', 'deploy-prod', 'notify'],
+        'fullstack': ['checkout', 'build', 'test', 'security', 'deploy-staging', 'deploy-prod'],
+        'microservices': ['checkout', 'build', 'test', 'deploy-staging', 'deploy-prod', 'notify']
+    };
+    
+    const stages = presets[presetType] || [];
+    stages.forEach((stage, index) => {
+        setTimeout(() => {
+            addStageToCanvas(stage);
+        }, index * 150);
+    });
+}
+
+// Copy Jenkinsfile to Clipboard
+function copyToClipboard() {
+    const pre = document.querySelector('#jenkinsfileOutput pre');
+    if (!pre) {
+        alert('Please generate a Jenkinsfile first!');
+        return;
+    }
+    
+    const text = pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Jenkinsfile copied to clipboard!');
+    }).catch(() => {
+        alert('Failed to copy. Please try again.');
+    });
+}
+
+// Update Progress Bars
+function updateProgressBars() {
+    // Concept progress (based on scroll through concepts)
+    const conceptProgress = Math.min(100, (localStorage.getItem('conceptsViewed') || 0) * 10);
+    document.getElementById('conceptProgress').style.width = conceptProgress + '%';
+    
+    // Quiz progress (based on final score)
+    const quizProgress = Math.min(100, score * 20);
+    document.getElementById('quizProgress').style.width = quizProgress + '%';
+    
+    // Pipeline progress (based on generated pipelines)
+    const pipelineProgress = Math.min(100, (localStorage.getItem('pipelinesGenerated') || 0) * 25);
+    document.getElementById('pipelineProgress').style.width = pipelineProgress + '%';
+}
