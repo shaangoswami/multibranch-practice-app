@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE = "shaangoswami/jenkins-practice-app:v2"
         
         // The ID of the K8s credentials you saved in Jenkins
-        K8S_CREDS_ID = "my-k8s-config"
+        K8S_CREDS_ID = "host-ssh"
     }
         
     // environment {
