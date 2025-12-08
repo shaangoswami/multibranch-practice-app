@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-practice-deployment
+  labels:
+    app: jenkins-practice-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-practice-app
+  template:
+    metadata:
+      labels:
+        app: jenkins-practice-app
+    spec:
+      containers:
+      - name: web-app-container
+        image: shaangoswami/jenkins-practice-app:v2
+        ports:
+        - containerPort: 80
