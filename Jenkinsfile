@@ -31,7 +31,8 @@ pipeline {
                 withKubeConfig([credentialsId: K8S_CREDS_ID]) {
                     sh """                     
                         # A. Apply the changes
-                        kubectl apply -f .
+                        kubectl apply -f deployment.yaml
+                        kubectl apply -f service.yaml
                     """
                 }
             }
