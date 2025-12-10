@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent jenkins-agent
 
     environment{
         DOCKER_IMAGE = "shaangoswami/jenkins-practice-app:v2"
