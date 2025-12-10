@@ -1,5 +1,6 @@
 pipeline {
-    agent jenkins-agent
+    agent {
+        jenkins-agent{
 
     environment{
         DOCKER_IMAGE = "shaangoswami/jenkins-practice-app:v2"
@@ -53,6 +54,8 @@ pipeline {
                     """
                 }
             }
+        }
+    }
         }
     }
 }
