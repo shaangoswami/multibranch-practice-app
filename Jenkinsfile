@@ -25,21 +25,21 @@ pipeline {
             }
         }
 
-        stage('Install kubectl') {
-            steps {
-                sh '''
-                    # Download kubectl
-                    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        // stage('Install kubectl') {
+        //     steps {
+        //         sh '''
+        //             # Download kubectl
+        //             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
                     
-                    # Install kubectl
-                    chmod +x kubectl
-                    sudo mv kubectl /usr/local/bin/
+        //             # Install kubectl
+        //             chmod +x kubectl
+        //             sudo mv kubectl /usr/local/bin/
                     
-                    # Verify installation
-                    kubectl version --client
-                '''
-            }
-        }
+        //             # Verify installation
+        //             kubectl version --client
+        //         '''
+        //     }
+        // }
 
         
         stage('Deploy to Kubernetes') {
@@ -48,8 +48,8 @@ pipeline {
                 withKubeConfig([credentialsId: K8S_CREDS_ID]) {
                     sh """                     
                         # A. Apply the changes
-                        kubectl apply -f deployment.yaml
-                        kubectl apply -f service.yaml
+                        microk8s kubectl apply -f deployment.yaml
+                        microk8s kubectl apply -f service.yaml
                     """
                 }
             }
