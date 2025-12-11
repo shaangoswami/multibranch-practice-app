@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment{
-        DOCKER_IMAGE = "shaangoswami/jenkins-practice-app:v2"
+        DOCKER_IMAGE = "shaangoswami/jenkins-kubectl:v2"
         
         // The ID of the K8s credentials you saved in Jenkins
         K8S_CREDS_ID = "host-ssh"
