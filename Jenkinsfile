@@ -48,8 +48,8 @@ pipeline {
                 withKubeConfig([credentialsId: K8S_CREDS_ID]) {
                     sh """                     
                         # A. Apply the changes
-                        sudo microk8s kubectl apply -f deployment.yaml
-                        sudo microk8s kubectl apply -f service.yaml
+                        kubectl apply -f deployment.yaml
+                        kubectl apply -f service.yaml
                     """
                 }
             }
