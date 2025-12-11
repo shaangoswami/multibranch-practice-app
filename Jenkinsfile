@@ -1,6 +1,5 @@
 pipeline {
-    agent {
-        jenkins-agent{
+    agent any
 
     environment{
         DOCKER_IMAGE = "shaangoswami/jenkins-practice-app:v2"
@@ -56,9 +55,9 @@ pipeline {
             }
         }
     }
-        }
-    }
 }
+
+
     
                 
 //         stage('Validate Files') {
